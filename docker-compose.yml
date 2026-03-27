@@ -1,0 +1,27 @@
+services:
+  postgres:
+    container_name: myapp_db
+    environment:
+      POSTGRES_DB: auth_service
+      POSTGRES_PASSWORD: Artem2502
+      POSTGRES_USER: postgres
+    image: postgres:15
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 5432
+        published: "5433"
+        protocol: tcp
+    restart: unless-stopped
+    volumes:
+      - type: volume
+        source: postgres_data
+        target: /var/lib/postgresql/data
+        volume: {}
+networks:
+  default:
+    name: auth_service_default
+volumes:
+  postgres_data:
+    name: auth_service_postgres_data
