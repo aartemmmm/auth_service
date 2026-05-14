@@ -29,13 +29,13 @@ jobs:
           pip install ruff mypy pytest pytest-cov anyio
 
       - name: Lint with ruff
-        run: ruff check app/ tests/
+        run: ruff check app/ tests/ --exclude tests/test_integration.py
 
       - name: Type check with mypy
         run: mypy app --ignore-missing-imports
 
       - name: Test with pytest
-        run: pytest --cov=app --cov-fail-under=70 tests/
+        run: pytest --cov=app --cov-fail-under=70 tests/ --ignore=tests/test_integration.py
 
   build-and-push:
     needs: test

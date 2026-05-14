@@ -1,5 +1,6 @@
 import os
 import secrets
+import uuid
 from datetime import datetime, timedelta, timezone
 
 import bcrypt
@@ -9,7 +10,7 @@ _SECRET = os.getenv("JWT_SECRET") or secrets.token_urlsafe(48)
 
 
 def hash_password(password: str) -> str:
-    pw = password.encode("utf-8")[:72]  # bcrypt учитывает только первые 72 байта
+    pw = password.encode("utf-8")[:72]
     hashed = bcrypt.hashpw(pw, bcrypt.gensalt())
     return hashed.decode("utf-8")
 
@@ -47,6 +48,7 @@ def create_refresh_token(*, sub: str, session_id: str, expires_days: int = 14) -
         "typ": "refresh",
         "sub": sub,
         "sid": session_id,
+        "jti": str(uuid.uuid4()),
         "iat": int(now.timestamp()),
         "exp": int(exp_dt.timestamp()),
     }
