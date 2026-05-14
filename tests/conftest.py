@@ -5,13 +5,9 @@ import pytest
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
-# Гарантируем импорт `app.*`, даже если pytest меняет cwd
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
-
-from app.database import Base, get_db
-from app.main import app
 
 
 TEST_DATABASE_URL = "sqlite+aiosqlite:///:memory:"
@@ -24,6 +20,8 @@ def anyio_backend():
 
 @pytest.fixture()
 async def db_session():
+    from app.database import Base
+
     engine = create_async_engine(TEST_DATABASE_URL, future=True)
     async_session = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
@@ -41,6 +39,9 @@ async def db_session():
 
 @pytest.fixture()
 async def client(db_session: AsyncSession):
+    from app.database import get_db
+    from app.main import app
+
     async def override_get_db():
         yield db_session
 

@@ -14,7 +14,7 @@ except Exception:  # pragma: no cover
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app import crud, models, schemas
+from app import crud, schemas
 from app.database import get_db
 from app.security import create_access_token, create_refresh_token, decode_token, verify_password
 
