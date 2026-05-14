@@ -76,7 +76,11 @@ async def test_crud_users():
     assert await crud.get_user(db, 999) is None
 
     created = None
-    def capture(obj): nonlocal created; created = obj
+
+    def capture(obj):
+        nonlocal created
+        created = obj
+
     db.add.side_effect = capture
 
     user_in = schemas.UserCreate(email="new@t.com", username="newuser", password="Pass1234")
@@ -93,7 +97,11 @@ async def test_crud_sessions():
     db = _db()
 
     saved = None
-    def capture(obj): nonlocal saved; saved = obj
+
+    def capture(obj):
+        nonlocal saved
+        saved = obj
+
     db.add.side_effect = capture
 
     await crud.create_session(
